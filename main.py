@@ -120,13 +120,13 @@ print(df_customers)
 
 # STEP 10
 df_under_20 = """
- SELECT DISTINCT employeeNumber, firstName, lastName, city, offices.officeCode
- FROM employees
- JOIN offices ON offices.officeCode = employees.officeCode
- JOIN customers ON employees.employeeNumber = customers.salesRepEmployeeNumber
- JOIN orders ON customers.customerNumber = orders.customerNumber
- JOIN orderdetails ON orders.orderNumber = orderdetails.orderNumber
- WHERE orderdetails.productCode IN (
+ SELECT DISTINCT employeeNumber, firstName, lastName, offices.city, offices.officeCode
+FROM employees
+JOIN offices ON offices.officeCode = employees.officeCode
+JOIN customers ON employees.employeeNumber = customers.salesRepEmployeeNumber
+JOIN orders ON customers.customerNumber = orders.customerNumber
+JOIN orderdetails ON orders.orderNumber = orderdetails.orderNumber
+WHERE orderdetails.productCode IN (
     SELECT products.productCode
     FROM products
     JOIN orderdetails ON products.productCode = orderdetails.productCode
