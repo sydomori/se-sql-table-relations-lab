@@ -5,7 +5,7 @@ conn = sqlite3.connect('data.sqlite')
 
 # STEP 1
 df_boston = """
- SELECT firstName, lastName, jobTitle
+ SELECT firstName, lastName
  FROM employees
  JOIN offices ON employees.officeCode = offices.officeCode
  WHERE offices.city = 'Boston'
@@ -113,7 +113,6 @@ df_customers = """
  LEFT JOIN employees ON offices.officeCode = employees.officeCode
  LEFT JOIN customers ON employees.employeeNumber = customers.salesRepEmployeeNumber
  GROUP BY offices.officeCode
- ORDER BY n_customers DESC
 """
 df_customers = pd.read_sql(df_customers, conn)
 print(df_customers)
@@ -135,6 +134,7 @@ WHERE orderdetails.productCode IN (
     GROUP BY products.productCode
     HAVING COUNT(DISTINCT customers.customerNumber) < 20
 )
+ORDER BY lastName, firstName
 """
 df_under_20 = pd.read_sql(df_under_20, conn)
 print(df_under_20)
