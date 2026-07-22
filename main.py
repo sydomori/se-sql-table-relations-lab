@@ -1,26 +1,19 @@
-# STEP 0
-
-# SQL Library and Pandas Library
 import sqlite3
 import pandas as pd
 
-# Connect to the database
 conn = sqlite3.connect('data.sqlite')
 
-pd.read_sql("""SELECT * FROM sqlite_master""", conn)
-
 # STEP 1
-# Replace None with your code
 df_boston = """
  SELECT firstName, lastName, jobTitle
  FROM employees
  JOIN offices ON employees.officeCode = offices.officeCode
  WHERE offices.city = 'Boston'
 """
-print (pd.read_sql(df_boston,conn))
+df_boston = pd.read_sql(df_boston, conn)
+print(df_boston)
 
 # STEP 2
-# Replace None with your code
 df_zero_emp = """
 SELECT offices.officeCode, COUNT(employees.employeeNumber) AS total_employees
 FROM offices
@@ -28,20 +21,20 @@ LEFT JOIN employees USING (officeCode)
 GROUP BY offices.officeCode
 HAVING total_employees = 0
 """
-print (pd.read_sql(df_zero_emp,conn))
+df_zero_emp = pd.read_sql(df_zero_emp, conn)
+print(df_zero_emp)
 
 # STEP 3
-# Replace None with your code
 df_employee = """
  SELECT firstName, lastName, city, state
  FROM employees
  LEFT JOIN offices USING (officeCode)
  ORDER BY firstName, lastName
 """
-print (pd.read_sql(df_employee,conn))
+df_employee = pd.read_sql(df_employee, conn)
+print(df_employee)
 
 # STEP 4
-# Replace None with your code
 df_contacts = """
  SELECT contactFirstName,
         contactLastName,
@@ -52,34 +45,35 @@ df_contacts = """
  WHERE orders.customerNumber IS NULL
  ORDER BY contactLastName
 """
-print (pd.read_sql(df_contacts,conn))
+df_contacts = pd.read_sql(df_contacts, conn)
+print(df_contacts)
 
 # STEP 5
-# Replace None with your code
 df_payment = """
  SELECT contactFirstName, contactLastName, amount, paymentDate
  FROM customers
  JOIN payments USING (customerNumber)
  ORDER BY CAST(amount AS FLOAT) DESC
 """
-print (pd.read_sql(df_payment,conn))
+df_payment = pd.read_sql(df_payment, conn)
+print(df_payment)
 
 # STEP 6
-# Replace None with your code
 df_credit = """
  SELECT employeeNumber, 
         firstName, 
         lastName,
         COUNT(customers.customerNumber) AS total_customers
  FROM employees
- JOIN customers ON employees.emploeeNumber = customers.salesRepEmployeeNumber
+ JOIN customers ON employees.employeeNumber = customers.salesRepEmployeeNumber
  GROUP BY employees.employeeNumber
  HAVING AVG(customers.creditLimit) > 90000
  ORDER BY total_customers DESC
 """
+df_credit = pd.read_sql(df_credit, conn)
+print(df_credit)
 
 # STEP 7
-# Replace None with your code
 df_product_sold = """
  SELECT 
     productName,
@@ -90,9 +84,10 @@ df_product_sold = """
  GROUP BY products.productCode
  ORDER BY totalunits DESC
 """
+df_product_sold = pd.read_sql(df_product_sold, conn)
+print(df_product_sold)
 
 # STEP 8
-# Replace None with your code
 df_total_customers = """
  SELECT 
     productName,
@@ -105,9 +100,10 @@ df_total_customers = """
  GROUP BY products.productCode
  ORDER BY numpurchasers DESC
 """
+df_total_customers = pd.read_sql(df_total_customers, conn)
+print(df_total_customers)
 
 # STEP 9
-# Replace None with your code
 df_customers = """
  SELECT 
     offices.officeCode,
@@ -117,10 +113,12 @@ df_customers = """
  LEFT JOIN employees ON offices.officeCode = employees.officeCode
  LEFT JOIN customers ON employees.employeeNumber = customers.salesRepEmployeeNumber
  GROUP BY offices.officeCode
+ ORDER BY n_customers DESC
 """
+df_customers = pd.read_sql(df_customers, conn)
+print(df_customers)
 
 # STEP 10
-# Replace None with your code
 df_under_20 = """
  SELECT DISTINCT employeeNumber, firstName, lastName, city, offices.officeCode
  FROM employees
@@ -138,16 +136,7 @@ df_under_20 = """
     HAVING COUNT(DISTINCT customers.customerNumber) < 20
 )
 """
-print (pd.read_sql(df_under_20,conn))
+df_under_20 = pd.read_sql(df_under_20, conn)
+print(df_under_20)
 
 conn.close()
-"""
-SELECT products.productCode, productName, COUNT(DISTINCT customers.customerNumber) AS numpurchasers
- FROM products
- JOIN orderdetails ON products.productCode = orderdetails.productCode
- JOIN orders ON orderdetails.orderNumber = orders.orderNumber
- JOIN customers ON orders.customerNumber = customers.customerNumber
- GROUP BY products.productCode
- HAVING numpurchasers < 20
-
-"""
